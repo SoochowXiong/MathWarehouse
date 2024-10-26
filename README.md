@@ -199,7 +199,7 @@
 ## 联系信息
 如有任何问题、建议或反馈，欢迎随时联系！
 
-- 项目维护者：[Xiong](https://github.com/SoochowXiong), [Xue](https://github.com/xuejiahua) 和 [Wu](https://github.com/Jessiewu5)
+- 项目维护者：[Shen](https://github.com/ShenFeilang), [Wu](https://github.com/Jessiewu5), [Xue](https://github.com/xuejiahua) 和 [Xiong](https://github.com/SoochowXiong)
 - 邮箱：SoochowXiong@gmail.com
 
 希望您在数学资源库中享受学习的乐趣！祝您学习愉快！
