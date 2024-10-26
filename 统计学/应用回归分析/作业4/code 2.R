@@ -1,0 +1,1 @@
+cor(dat,method = "spearman")

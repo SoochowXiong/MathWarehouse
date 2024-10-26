@@ -1,0 +1,1 @@
+confint(fit,level=.9)

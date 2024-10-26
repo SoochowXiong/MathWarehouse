@@ -1,0 +1,127 @@
+\documentclass[12pt, a4paper, oneside]{ctexart}
+\usepackage{amsmath, amsthm, amssymb, bm, color, framed, graphicx, hyperref, mathrsfs,enumerate,colortbl}
+\title{\textbf{第五次作业}}
+\author{1907402030 熊雄}
+\date{\today}
+\linespread{1.25}
+\definecolor{shadecolor}{RGB}{241, 241, 255}
+\newcounter{problemname}
+\newenvironment{problem}{\begin{shaded}\stepcounter{problemname}\par\noindent  \textbf{Question \arabic{problemname}. }} {\end{shaded}\par}
+\newenvironment{solution}{\par\noindent \textbf {Answer. }}{\par}
+\def\hth{\hat\theta}
+\def\mA{\mathcal{A}}
+\def\vv{1.2}
+\usepackage{indentfirst}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor} 
+\usepackage{listings}
+\lstset{%
+	alsolanguage=Java,
+	%alsolanguage=[ANSI]C,      %可以添加很多个alsolanguage,如alsolanguage=matlab,alsolanguage=VHDL等
+	alsolanguage= matlab,
+	alsolanguage= XML,
+	alsolanguage= R,
+	tabsize=4, %
+	frame=shadowbox, %把代码用带有阴影的框圈起来
+	commentstyle=\color{red!100!green!100!blue!50},%浅灰色的注释
+	rulesepcolor=\color{red!20!green!20!blue!20},%代码块边框为淡青色
+	keywordstyle=\color{blue!90}\bfseries, %代码关键字的颜色为蓝色，粗体
+	showstringspaces=false,%不显示代码字符串中间的空格标记
+	stringstyle=\ttfamily, % 代码字符串的特殊格式
+	keepspaces=true, %
+	breakindent=22pt, %
+	numbers=left,%左侧显示行号 往左靠,还可以为right，或none，即不加行号
+	stepnumber=1,%若设置为2，则显示行号为1,3,5，即stepnumber为公差,默认stepnumber=1
+	%numberstyle=\tiny, %行号字体用小号
+	numberstyle={\color[RGB]{0,192,192}\tiny} ,%设置行号的大小，大小有tiny,scriptsize,footnotesize,small,normalsize,large等
+	numbersep=8pt,  %设置行号与代码的距离，默认是5pt
+	basicstyle=\footnotesize, % 这句设置代码的大小
+	showspaces=false, %
+	flexiblecolumns=true, %
+	breaklines=true, %对过长的代码自动换行
+	breakautoindent=true,%
+	breakindent=4em, %
+	escapebegin=\begin{CJK*},escapeend=\end{CJK*},
+	aboveskip=1em, %代码块边框
+	tabsize=2,
+	showstringspaces=false, %不显示字符串中的空格
+	backgroundcolor=\color[RGB]{245,245,244},   %代码背景色
+	%backgroundcolor=\color[rgb]{0.91,0.91,0.91}    %添加背景色
+	escapeinside=``,  %在``里显示中文
+	%% added by http://bbs.ctex.org/viewthread.php?tid=53451
+	fontadjust,
+	captionpos=t,
+	framextopmargin=2pt,framexbottommargin=2pt,abovecaptionskip=-3pt,belowcaptionskip=3pt,
+	xleftmargin=0.5em,xrightmargin=0.5em, % 设定listing左右的空白
+	texcl=true,
+	% 设定中文冲突，断行，列模式，数学环境输入，listing数字的样式
+	extendedchars=false,columns=flexible,mathescape=true
+	% numbersep=-1em
+}
+
+\begin{document}
+ 	\maketitle
+\begin{problem}
+	\textbf{(课件思考题)}
+	
+	Consider a random sample $X_1, X_2, · · · , X_n  \sim Unif(0,\theta).$
+ 	\begin{enumerate}
+ 		\item {\tt}
+ 	Find the estimator for $\theta$ through MoM, denoted by $\hat{\theta}_{MM}$.
+ 		\item {\tt}
+ 	Find the MLE $\hat{\theta}_{MLE}$.
+		\item {\tt}
+		 What are the expectation and variance of $\hat{\theta}_{MM}$ and $\hat{\theta}_{MLE}$? Which estimator is better?
+ 	\end{enumerate}
+\end{problem}
+\begin{solution}	
+   	\begin{enumerate}
+   	\item {\tt}    {\bf Solve.} 
+  
+   设母体 $X  \sim Unif(0,\theta)$, 故
+   \[ EX = \int_0^\theta \frac{x} {\theta}dx = \frac{\theta}{2} . \]
+   因此用矩法估计得方程:\[ \overline{X}=\frac{\theta}{2} .\]
+   从而得到 $\theta$的矩估计为\[ \hat{\theta}_{MM} = 2\overline{X}.\]
+   	\item {\tt }   {\bf Solve.}
+   
+   	设子样的观测值分别为$x_1, x_2, · · · , x_n$. 似然函数\[ L(\theta;x_1, x_2,···,x_n) = \frac{1}{\theta ^ n}, \ 0 < x_i \le \theta ,\ i = 1,···,n\]是$\theta$的一个单调递减函数. 由于每一个 $x_i \le \theta$, 最大次序统计量的观测值$x_{(n)}=\underset{1\le i\le n}{\max}x_i \le \theta$. 在$0<x_i\le \theta , i = 1,···,n$中要使 $L(\theta;x_1, x_2,···,x_n)= \frac{1}{\theta ^ n}$达到极大, 就要使 $\theta$ 达到最小. 但$\theta$不能小于 $x_{(x_n)}$, 否则子样的观测值为$x_1, x_2, · · · , x_n$就不是来自这一母体, 所以$\hat{\theta}_L = x_{(n)}$是$\theta$的极大似然估计值. 于是$\hat{\theta}_L(X_1,X_2,···,X_n) = X_{(n)}$即最大次序统计量是参数$\theta$的极大似然估计量, 即\[ \hat{\theta}_{MLE}= X_{(n)}.\]
+   	
+   	\item {\tt }   {\bf Solve.}
+   
+   	显然, 由矩法估计的性质我们有:
+   	\[ E(\hat{\theta}_{MM}) = \theta ,\] \[ Var(\hat{\theta}_{MM}) = Var(2\overline X) = \frac n 4Var(X_1) = \frac{\theta^2}{3n}. \]
+   	$\hat{\theta}_{MLE}$的分布函数为:
+   	
+   $$ F(x) = P(\hat{\theta}_{MLE} < x)=P(X_{(n)} < x)=\left\{
+   \begin{array}{rcl}
+    0, & & {x \le 0}\\
+   (\frac x \theta )^n, & & {0<x<\theta}\\
+   1, & & {x\ge \theta}
+   \end{array} \right. $$
+   从而$\hat{\theta}_{MLE}$的密度函数为:
+  $$ f_{\hat{\theta}_{MLE}}(x) =\left\{
+  \begin{array}{rcl}
+  \frac{nx^{n-1}}{\theta^n}, & & {0<x<\theta}\\
+  0, & & {else}
+  \end{array} \right. $$
+   则很容易可求得\[ E(\hat{\theta}_{MLE}) = \int_0^\theta x·\frac{nx^{n-1}}{\theta^n} dx = \frac{n}{n+1}\theta ,\]
+   \[ E(\hat{\theta}_{MLE}^2) = \int_0^\theta x·\left(\frac{nx^{n-1}}{\theta^n}\right)^2 dx = \frac{n}{n+2}\theta^2,\]
+   \[ Var(\hat{\theta}_{MLE}) =   E(\hat{\theta}_{MLE}^2) - \left(E(\hat{\theta}_{MLE}) \right)^2 = \frac{n}{(n+1)^2(n+2)}\theta^2.\]
+   由以上的计算可以看出$\hat{\theta}_{MM}$是$\theta$的无偏估计, $\hat{\theta}_{MLE}$是$\theta$的有偏估计, 但是二者的阶(order)偏差较小, 且其方差的阶(order)比$\hat{\theta}_{MM}$小, 并且可以比较得到在$n>0$时$Var(\hat{\theta}_{MLE})<Var(\hat{\theta}_{MM})$. 综上所述, 选择 $\hat{\theta}_{MLE}$ 作为$\theta$的估计更好.
+   \end{enumerate} 
+\end{solution}
+
+\begin{problem}
+		\textbf{(课本P151 d5.9)}	
+	
+	在研究国家财政收入时, 我们把财政收入按收入形式分为:各项税收收入、企业收入、债务收入、国家能源交通重点建设基金收入、基本建设贷款归还收入、国家预算调节基金收入、其他收入等。为了建立国家财政收入回归模型, 我们以财政收入$y$（亿元）为因变量, 自变量如下: $x_1$为农业增加值（亿元）;$x_2$为工业增加值（亿元）;$x_3$为建筑业增加值（亿元）;$x_4$为人口数（万人）;$x_5$为社会消费总额（亿元）;$x_6$为受灾面积（万公顷）。据《中国统计年鉴》获得$1978 \sim 1998$年共21个年份的统计数据, 见\textbf{课本P151 表5-5}。由定性分析知，所选自变量与变量$y$有较强的相关性, 分别用后退法和逐步回归法做自变量选元。
+\end{problem}
+\begin{solution}
+	\begin{enumerate}
+		\lstinputlisting[language=R]{code1.r}
+	\end{enumerate}
+\end{solution}
+
+\end{document}
