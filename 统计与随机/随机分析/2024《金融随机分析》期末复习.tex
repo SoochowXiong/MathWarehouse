@@ -1,0 +1,397 @@
+\documentclass{article}
+\usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=3.18cm,right=3.18cm]{geometry}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{xeCJK}
+\usepackage{amsmath,amsfonts,amssymb,amscd,amsthm,mathrsfs}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{problem}{\itshape Problem}
+\newtheorem*{Solution}{\itshape Solution}
+\renewenvironment{Solution}[1][\itshape Solution.]{%
+  \par\noindent\textbf{#1}\quad\CJKfamily{SimSun}%
+}{\par}
+
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep
+        \bfseries\itshape
+    #1\@addpunct{.}]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+
+\newcommand{\RR}[0]{\mathbb{R}}
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+	\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{第 \thepage 页~~共 \pageref{LastPage} 页}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\labelenumi}{\arabic{enumi}.}
+\renewcommand{\labelenumii}{(\arabic{enumii})}
+\renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
+
+
+\linespread{1.4}										% 行距
+\expandafter\def\expandafter\normalsize\expandafter{
+	\setlength\abovedisplayskip{3pt}					% 公式前行距
+	\setlength\belowdisplayskip{3pt}                    % 公式后行距
+}
+\setlist{
+	topsep    = 0pt,
+	parsep    = 0pt,
+	itemsep   = 1pt,
+	partopsep = 3pt
+}
+
+    	\titleformat{\section}[hang]{\bfseries \large}{\thesection.}{0.5em}{}
+    	\titlespacing{\section}{0em}{2ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+    
+    	% subsection
+    	\titleformat{\subsection}[hang]{\bfseries}{\thesubsection.}{0.5em}{}
+    	\titlespacing{\subsection}{0em}{1.5ex plus 1ex minus .2ex}{0.5ex plus .2ex}
+
+
+
+\begin{document}
+
+\vspace{1em}
+\begin{center}
+\textbf{\LARGE 苏州大学金融工程研究中心}\par
+\vspace{8pt}
+\textbf{\LARGE 2023--2024学年第二学期期末考试复习提纲}\par
+\vspace{8pt}
+最后一次更新于\today
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{m{0.33\textwidth} m{0.25\textwidth} m{0.28\textwidth}}
+     课程名称：\textbf{金融随机分析} 
+     & \multicolumn{2}{l}{作者: 熊雄}
+\end{tabular}
+\end{center}
+\hrule height 1pt
+\noindent
+\rule{\textwidth}{1pt}
+
+
+\begin{problem}
+  令$\{B_t,t\ge 0\}$是概率空间$(\Omega, \mathfrak{I}, P)$上的一维标准布朗运动, $B_0 = 0$. 
+
+  \begin{enumerate}[label=(\arabic*)]
+  \item 证明$\{B_t,t\ge 0\}$和$\{B_t^2 - t,t\ge 0\}$均为鞅;
+  \item 令$T = \inf \{t:B_t\notin [a,b],a<0<b\}$, 求$B_T$的分布;
+  \item 对$r >0$, 定义$M_t := \int_0^t e^{rs} dB_s, t\ge 0$,  , 求$\{M_t\}$的二次变差过程$\{\langle M \rangle _t,t\ge 0\}$;
+  \item 求$M_t$的分布;
+  \item 求时间变换$\tau = \tau(t)$, 使$W_t = M_{\tau(t)}$为标准布朗运动;
+  \item 令$T_0 = \inf\{t: M_t\notin [a,b], a<0<b\}$, 求$M_T$的分布;
+   \end{enumerate}
+  \end{problem}
+
+    \begin{enumerate}[label=(\arabic*)]
+    \item \begin{proof}
+      $\forall 0\le s\le t$, 我们有
+      \begin{eqnarray*}
+        \mathbb{E}\left[B_t|\mathfrak{I}_s\right] 
+        = \mathbb{E}\left[B_t-B_s +B_s|\mathfrak{I}_s\right]
+        = \mathbb{E}\left[B_t-B_s|\mathfrak{I}_s\right]+\mathbb{E}\left[B_s|\mathfrak{I}_s\right] 
+        = \mathbb{E}\left[B_t-B_s\right]+B_s 
+        = B_s,
+      \end{eqnarray*}
+  和
+  \begin{eqnarray*}
+    \mathbb{E}\left[B_t^2 - t|\mathfrak{I}_s\right]& = &\mathbb{E}\left[B_t^2-B_s^2 +B_s^2\middle|\mathfrak{I}_s\right] - t\\
+    & = &\mathbb{E}\left[\left(B_t-B_s\right)^2+2B_tB_s - B_s^2\middle|\mathfrak{I}_s\right] - t \\
+    & = &\mathbb{E}\left[\left(B_t-B_s\right)^2\middle|\mathfrak{I}_s\right]+2\mathbb{E}\left[B_tB_s\middle|\mathfrak{I}_s\right]-\mathbb{E}\left[B_s^2\middle|\mathfrak{I}_s\right] - t\\
+    & = & (t -s) +2B_s^2 - B_s^2 - t \\
+    & = & B_s^2 -s,
+  \end{eqnarray*}
+  故$\{B_t,t\ge 0\}$和$\{B_t^2 - t,t\ge 0\}$均为鞅.
+    \end{proof}
+    \item 
+  \begin{Solution}
+     由B.M.的常返性知, $T$为有界停时, 从而$\mathbb{E}\left[B_T\right]=\mathbb{E}\left[B_0\right]=0$. 令
+  \begin{eqnarray*}
+    T_a := \inf\left\{t:B_t =a\right\},\quad T_b := \inf\left\{t:B_t =b\right\},\quad  T = \min\{T_a,T_b\},
+  \end{eqnarray*}
+  故
+  \begin{eqnarray*}
+    P\left(B_T = a\right) = P\left(T_a < T_b\right),\quad  P\left(B_T = b\right) = P\left(T_a \ge T_b\right).
+  \end{eqnarray*}
+  从而有
+  \begin{eqnarray*}
+    \left\{\begin{array} { l } 
+      { \mathbb{E} ( B_T ) = a \cdot P (T _ {a} < T _ {b} ) + b \cdot P (T _ {a} \geqslant T _ {b} ) = 0 } \\
+      { P (T _ {a} < T _ { b } ) + P ( T _ {a} \geqslant T _ { b } ) = 1 }
+      \end{array} \Rightarrow \left\{\begin{array}{l}
+      P\left(T_a<T_b\right)=\frac{b}{b-a} \\
+      P\left(T_a \geqslant T_b\right)=-\frac{a}{b-a}
+      \end{array}\right.\right.
+  \end{eqnarray*}
+  则$B_T$的分布为
+  \begin{eqnarray*}
+    P\left(B_T = a\right) = \frac{b}{b-a} ,\quad  P\left(B_T = b\right) = -\frac{a}{b-a}.
+  \end{eqnarray*}
+    \end{Solution}
+  
+    \item   \begin{Solution}
+   由于$M_t$是一个Itô积分, 故由Itô积分的二次变差性质知
+   \begin{eqnarray*}
+    \langle M\rangle_t = \int_0^t \left(e^{rs}\right)^2 d    \langle B\rangle_t = \int_0^t e^{2rs} d s = \frac{1}{2r}\left(e^{2rt}-1\right),\quad t\ge 0.
+  \end{eqnarray*}
+    \end{Solution}
+    \item   \begin{Solution}
+    由Itô积分的Itô等距性质知
+    \begin{eqnarray*}
+      \mathbb{E}\left[M_t\right] &=& \mathbb{E}\left[\int_0^t e^{rs} dB_s\right] = 0,\\
+      \mathbb{E}\left[M_t^2\right] &=&\mathbb{E}\left[ \int_0^t \left(e^{rs}\right)^2  d s \right]= \frac{1}{2r}\left(e^{2rt}-1\right),
+    \end{eqnarray*}
+   则
+   \begin{eqnarray*}
+    M_t \sim N\left(0,\frac{1}{2r}\left(e^{2rt}-1\right)\right).
+   \end{eqnarray*}
+    \end{Solution}
+    \item   \begin{Solution}
+   取
+   \begin{eqnarray*}
+    \tau(t) = \inf \left\{s: \langle M\rangle_s > t \right\} = \inf\left\{s: \frac{1}{2r}\left(e^{2rs}-1\right)>t\right\} = \frac{1}{2r}\ln(2rt+1),
+   \end{eqnarray*}
+   则 $W_t = M_{\tau(t)} = M_{\frac{1}{2r}\ln(2rt+1)}$, 又因为$\langle M\rangle_t \rightarrow \infty,\quad t \rightarrow \infty$, 且$M_0 = 0$, 故由Dambis-Dubins-Schwarz定理知, $W_t = M_{\tau_t}$为一维标准布朗运动.
+    \end{Solution}
+    \item   \begin{Solution}
+   由(5)知, 在时间变换$\tau(t) = \frac{1}{2r}\ln(2rt+1)$下， $W_t = M_{\tau_{(t)}}$为一维标准布朗运动. 从而
+   \begin{eqnarray*}
+    \tau(T_0) = \inf\left\{\tau(t):M_{\tau_{(t)}}\notin[a,b], a<0<b\right\}= \inf\left\{\tau(t):W_t\notin[a,b], a<0<b\right\},
+   \end{eqnarray*}
+所以令$\tau(T_0) = T$, $M_T = M_{\tau(T_0)} = W_{T_0}=B_{T_0}$, 故
+\begin{eqnarray*}
+  &&P\left(B_T = a\right) = P\left(W_{T_0} = a\right)=P\left(M_{T} = a\right) =  \frac{b}{b-a} ,\\  &&P\left(B_T = b\right) = P\left(W_{T_0} = b\right)=P\left(M_{T} = b\right) = -\frac{a}{b-a}.
+\end{eqnarray*}
+    \end{Solution}
+     \end{enumerate}
+
+
+\begin{problem}
+设$f,g,q$为有界函数, $v(t,x)$为下述初值问题的有界解:
+\begin{equation*}
+  \begin{aligned}
+    & v_t(t, x)=\frac{1}{2} v_{x x}(t, x)+q(x) v_x(t, x)+g(x),\quad t>0,\quad x \in \mathbb{R}, \\
+    & v(0, x)=f(x),\quad x \in  \mathbb{R}.
+    \end{aligned}
+\end{equation*}
+则$v(t,x)$可以表示为
+\begin{equation*}
+  v(t, x)=\mathbb{E}\left[f\left(x+B_t\right) e^{\int_0^t q\left(x+B_s\right) d s}+\int_0^t g\left(x+B_s\right) e^{\int_0^s q\left(x+B_r\right) d r} d s\right],
+  \end{equation*}
+  其中$\{B_t,t\ge 0\}$为一维标准布朗运动.
+\end{problem}
+
+  \begin{proof}
+定义
+\begin{eqnarray*}
+  M_s := v(t-s,x+B_s)e^{\int_0^s q(x+B_v)dv} +\int_0^s g(x+B_v) e^{\int_0^s q(x+B_r)dr}dv,
+\end{eqnarray*}
+则 
+\begin{eqnarray*}
+  dM_s &=& e^{\int_0^s q(x+B_v)dv} \left[dv(t-s,x+B_s)+ q(x+B_s)vds\right]+g(x+B_s) e^{\int_0^s q(x+B_r)dr} ds\\
+  &=& e^{\int_0^s q(x+B_v)dv} \left[-v_sds +v_x dB_s +\frac{1}{2}v_{xx}ds + q(x+B_s)vds\right]+g(x+B_s) e^{\int_0^s q(x+B_r)dr}ds \\
+  &=& e^{\int_0^s q(x+B_v)dv} \left[ \left(-v_s+\frac{1}{2}v_{xx} + q(x+B_s)v +g(x+B_s) \right) ds +v_x dB_s\right] \\
+  &=& e^{\int_0^s q(x+B_v)dv} v_x dB_s,
+\end{eqnarray*}
+因此$M_s$为一个局部鞅, 由于$f,g,q$为有界函数, 故
+\begin{eqnarray*}
+  \sup_{0\le s\le t} |M_s| \le e^{\|q\|_\infty t} \left[\|v\|_\infty + t\|g\|_\infty\right]<\infty,
+\end{eqnarray*}
+有界局部鞅是鞅，因此$M_s$为一个鞅，从而$\mathbb{E}\left[M_0\right]=\mathbb{E}\left[M_t\right]$, 而
+\begin{eqnarray*}
+  \mathbb{E}\left[M_0\right]&=& v(t,x),\\
+  \mathbb{E}\left[M_t\right]&=&\mathbb{E}\left[f\left(x+B_t\right) e^{-\int_0^t q\left(x+B_s\right) d s}+\int_0^t g\left(x+B_s\right) e^{-\int_0^s q\left(x+B_r\right) d r} d s\right],
+\end{eqnarray*}
+故得证.
+  \end{proof}
+
+\begin{problem}
+  设$f,g,q,p$为有界连续函数, $v(t,x)$为下述初值问题的有界解:
+  \begin{equation*}
+    \begin{aligned}
+      & v_t(t, x)=\frac{1}{2} v_{x x}(t, x)+q(x) v_x(t, x)+p(x)v(t,x)+g(x),\quad t>0,\quad x \in \mathbb{R}, \\
+      & v(0, x)=f(x),\quad x \in \mathbb{R}.
+      \end{aligned}
+  \end{equation*}
+  求$v(t,x)$的Feynman-Kac表示式.
+\end{problem}
+
+
+  \begin{Solution}
+   猜测
+   \begin{eqnarray*}
+    v(t, x)=\mathbb{E}\left[f\left(x+Z_t\right) e^{\int_0^t p\left(x+Z_s\right) d s}+\int_0^t g\left(x+Z_r\right) e^{\int_0^r p\left(x+Z_u\right) d u} d r\right],
+   \end{eqnarray*}
+   设$dZ_t = q(Z_t)dt+dB_t$, $Z_0 = 0$, 其中$B_t$为标准布朗运动. 定义
+   \begin{eqnarray*}
+   I_1 = v(t-s,x+Z_s),\quad I_2 = e^{\int_0^s p\left(x+Z_u\right) d u},\quad I_3 = \int_0^s g\left(x+Z_u\right) e^{\int_0^u p\left(x+Z_r\right) d r}d u,
+   \end{eqnarray*}
+  定义$M_s := I_1I_2+I_3$. 则
+  \begin{eqnarray*}
+    dI_1 &=& d v(t-s,x+Z_s) 
+    =-v_tds +v_xdZ_s +\frac{1}{2}v_{xx}d\langle Z \rangle _s,
+    = \left[-v_t +q(Z_s)v_x +\frac{1}{2}v_{xx}\right]ds + v_xdB_s\\
+    dI_2 &=& I_2 p\left(x+Z_s\right) ds, \\
+    dI_3 &=& g\left(x+Z_s\right) e^{\int_0^s p\left(x+Z_u\right) d u}ds = g\left(x+Z_s\right)I_2ds.
+  \end{eqnarray*}
+则
+\begin{eqnarray*}
+  dM_s &=& d\left(I_1I_2+I_3\right) \\
+  &=& I_1dI_2 + I_2dI_1 +d\langle I_1,I_2 \rangle + dI_3 \\
+  &=& v p\left(x+Z_s\right) I_2 ds + g\left(x+Z_s\right)I_2ds + I_2\left\{ \left[ -v_t +q(Z_s)v_x +\frac{1}{2}v_{xx}\right]ds + v_xdB_s \right\}\\
+  &=& I_2 \left[\frac{1}{2}v_{xx} + qv_x + pv  +g-v_t\right]ds + I_2 v_xdB_s\\
+  &=&  I_2 v_xdB_s,
+\end{eqnarray*}
+因此$M_s$为一个局部鞅, 由于$f,p,q,v$为有界函数, 故
+\begin{eqnarray*}
+  \sup_{0\le s\le t} |M_s| \le e^{\|p\|_\infty t} \left[\|v\|_\infty + t\|g\|_\infty\right]<\infty,
+\end{eqnarray*}
+有界局部鞅是鞅，因此$M_s$为一个鞅，从而$\mathbb{E}\left[M_0\right]=\mathbb{E}\left[M_t\right]$, 而
+\begin{eqnarray*}
+  \mathbb{E}\left[M_0\right]&=& v(t,x),\\
+  \mathbb{E}\left[M_t\right]&=&\mathbb{E}\left[f\left(x+Z_t\right) e^{\int_0^t p\left(x+Z_s\right) d s}+\int_0^t g\left(x+Z_r\right) e^{\int_0^r p\left(x+Z_u\right) d u} d r\right],
+\end{eqnarray*}
+故猜测正确.
+\end{Solution}
+
+\begin{problem}
+令$\{B_t,t\ge 0\}$是概率空间$(\Omega, \mathfrak{I}, P)$上的一维标准布朗运动, $\mu\ge 0$为常数, 求一与$P$等价的测度$Q$使$W_t = B_t + \mu t$为$(\Omega, \mathfrak{I}, Q)$上的一维标准布朗运动. 若令$M_t = \sup_{0\le s \le t} W_s$, 求$M_t$的分布.
+\end{problem}
+
+\begin{Solution}
+   
+  根据Girsonov定理, 应选择
+  \begin{eqnarray*}
+    \int_0^t \frac{1}{Z_s} d\langle B,Z\rangle_s = -\mu t =  \int_0^t-\mu ds= \int_0^t -\mu d\langle B\rangle_s.
+  \end{eqnarray*} 
+  $Z_t$可表示为$Z_t = 1 + \int_0^t H_s dB_s$, 则有$\langle B,Z\rangle_s = \int_0^t H_s ds$, 代入有
+  \begin{eqnarray*}
+    \frac{H_s}{Z_s} =- \mu \Longrightarrow Z_t = 1 +\int _0^t \left(-\mu Z_s\right) dB_s,
+  \end{eqnarray*}
+该方程有唯一解
+\begin{eqnarray*}
+  Z_s = e^{-\mu B_t - \frac{1}{2}\mu^2t},
+\end{eqnarray*}
+故对$\forall A \in \mathfrak{I}$, 所求概率$Q(A) = \mathbb{E}\left[I_AZ_t\right]$.
+
+$W_t$ 为测度$Q$下的标准布朗运动, 下述$P(\cdot)$为$Q$下的概率. 由反射原理知
+\begin{eqnarray*}
+  P\left(\sup_{0\le s\le t} W_s \ge b, W_t \le a\right) &=&  P\left(\sup_{0\le s\le t} W_s \ge b, W_t \ge 2b -a\right) \\
+  &=& P\left(W_t \ge 2b-a\right) \\
+  &=& \frac{1}{\sqrt{2\pi t}} \int_{2b-a}
+^{+\infty} e^{-\frac{x^2}{2t}}dx.
+\end{eqnarray*}
+对上式关于$a$和$b$分别求微分, 可得到$\sup_{0\le s\le t} W_s$ 和$ W_t$的联合密度函数
+\begin{eqnarray*}
+  P\left(\sup_{0\le s\le t} W_s \ge db, W_t \le da\right) &=&  \frac{\partial^2}{\partial a \partial b}P\left(\sup_{0\le s\le t} W_s \ge b, W_t \le a\right)dadb\\
+  &=& \frac{\partial}{\partial a} \left(\frac{1}{\sqrt{2\pi t}} e^{-\frac{(2b-a)^2}{2t}}\right)dadb\\
+  &=& \frac{2(2b-a)}{\sqrt{2\pi t^3}} e^{-\frac{(2b-a)^2}{2t}}dadb,
+\end{eqnarray*}
+其中$a,b\in\left\{(b,a):a\le b, b\ge 0\right\} \subset\mathbb{R}^2$, 对$\forall b>0$, 令$x:= 2c-a$,
+\begin{eqnarray*}
+  P\left(M_t \ge b\right) &=&  \frac{2}{\sqrt{2\pi t^3}} \iint_{\left\{a\le c, c\ge b\right\}} (2c-a) e^{-\frac{(2c-a)^2}{2t}}dadc\\
+  &=&  \frac{2}{\sqrt{2\pi t^3}} \int_b^{+\infty }\int_{-\infty}^c (2c-a) e^{-\frac{(2c-a)^2}{2t}}dadc\\
+  &=&  \frac{2}{\sqrt{2\pi t^3}} \int_b^{+\infty }\int^{+\infty}_c x e^{-\frac{x^2}{2t}}dxdc\\
+  &=&  \frac{2}{\sqrt{2\pi t}}  \int_b^{+\infty } e^{-\frac{x^2}{2t}}dx,
+\end{eqnarray*}
+则$M_t$的分布函数为$F(x,t) := \frac{2}{\sqrt{2\pi t}}  \int^x_{-\infty } e^{-\frac{s^2}{2t}}ds$.
+\end{Solution}
+
+	\begin{problem}
+		令$\{B_t,t\ge 0\}$是概率空间$(\Omega, \mathfrak{I}, P)$上的一维标准布朗运动, $\mathfrak{I} = \{F_t, t\ge 0\}$是其自然完备化过滤. 证明: 对任意$t>s$, 任意有界Borel可测函数$f$有
+		\begin{equation*}
+  			\E{f(B_t)|F_s} = P_{t-s}f(B_s),
+		\end{equation*}
+		其中$\{P_t,t\ge 0\}$为热半群. 特别有
+		\begin{equation*}
+			\E{f(B_t)|F_s} =  \E{f(B_t)|B_s} = G(B_s),
+		\end{equation*}
+		其中
+		\begin{equation*}
+			G(x)=P_{t-s} f(x)=\frac{1}{\sqrt{2 \pi(t-s)}} \int_\mathbb{R} f(y) e^{-\frac{(x-y)^2}{2(t-s)}} d y.
+		\end{equation*}
+	\end{problem}
+
+\begin{proof}
+  欲证明B.M.的马尔可夫性，即
+    	\begin{equation}
+    		\label{equ:1}
+    		\E{f(B_t)|F_t} = \E{f(B_t)|B_s}.
+    	\end{equation}
+    	先证比\eqref{equ:1}更一般的结论：对$s,t\geq 0$且$g=g(x,y)$有界可测，有
+    	\begin{equation}
+    		\label{equ:2}
+    		\E{g(B_s,B_{t+s}-B_s)|F_s} = \E{g(B_s,B_{t+s}-B_s)|B_s}.
+    	\end{equation}
+    	设$g(x,y)=g_1(x)g_2(y)$,则
+    	\begin{align}
+    		\E{g(B_s,B_{t+s}-B_s)|F_s} & = \E{g_1(B_s)g_2(B_{t+s}-B_s)|F_s}\notag\\
+    		& = g_1(B_s)\E{g_2(B_{t+s}-B_s)|F_s}\notag\\
+    		& = g_1(B_s)\E{g_2(B_{t+s}-B_s)}\notag\\
+    		& = g_1(B_s)\E{g_2(B_{t+s}-B_s)|B_s}\notag\\
+    		\label{equ:3}
+    		& = \E{g(B_s,B_{t+s}-B_s)|B_s}.
+    	\end{align}
+    	
+    	现在令$\mathcal{A}$为$\RR^d\times\RR^d$中的矩形所形成的集合, 即$\mathcal{A}=\{A_0\times B_0\in\mathcal{B}(\RR^d)\times\mathcal{B}(\RR^d),A_0,B_0\in\mathcal{B}(\RR^d)\}$. $\mathcal{H}$是所有使\eqref{equ:1}成立的有界函数$g$所组成的向量空间. 显然$\mathcal{A}$是一个$\pi$-系. 对$\forall A\in\mathcal{A}, \exists A_0,B_0\in\mathcal{B}(\RR^d), s.t. A=A_0\times B_0$. 取$g_1=I_{A_0},g_2=I_{B_0}$, 则\eqref{equ:2}对$g=I_A=I_{A_0\times B_0}$成立, 从而$I_A\in\mathcal{H}$. 由\eqref{equ:2}\eqref{equ:3}, 单调类收敛定理和单调类定理知\eqref{equ:2}对$\RR^d\times\RR^d$上所有有界可测函数成立. 特别取$g(x,y)=f(x+y)$, 知\eqref{equ:1}对任一$\RR^d$中有界可测函数成立.
+    	
+    	因此,
+    	\begin{align*}
+    		\E{I_A(B_s)f(B_t)} & = \iint I_A(x)f(y)p(s,x)p(t-s,y-x)\dd{x}\dd{y}\\
+    		& = \int I_A(x)P_{t-s}p(s,x)\dd{x}\\
+    		& = \E{I_A(B_s)P_{t-s}f(B_s)}.
+    	\end{align*}
+    	于是有
+    	\begin{equation*}
+    		\E{f(B_t)|B_s} = P_{t-s}f(B_s),
+    	\end{equation*}
+    	则
+    	\begin{equation*}
+    		\E{f(B_t)|F_s} = P_{t-s}f(B_s).
+    	\end{equation*}
+      得证.
+\end{proof}
+
+
+	\begin{problem}
+		令$\{B_t,t\ge 0\}$是概率空间$(\Omega, \mathfrak{I}, P)$上的一维标准布朗运动, $\mathfrak{I} = \{F_t, t\ge 0\}$是其自然完备化过滤. $T$为其自然完备化过滤$\mathfrak{I} = \{F_t, t\ge 0\}$的一个有界停时, 令$W_t = B_{t+T} - B_{T}, t\ge 0$. 证明:
+		\begin{enumerate}[label=(\arabic*)]
+			\item $\{W_t,t\ge 0\}$与$T$独立;
+			\item $\{W_t,t\ge 0\}$为一维标准布朗运动.
+		\end{enumerate}
+	\end{problem}
+
+	\begin{proof}
+  		\begin{enumerate}[label=(\arabic*)]
+    		\item 因为$T$是$\mathfrak{I}$上的一个有界停时, 故存在$K>0$, 使得$T<K$. 因为布朗运动具有独立增量, 故$W_t = B_{t+T} - B_{T}$与$B_{T}$独立, 故$\{W_t,t\ge 0\}$与$T$独立.
+    		\item 因为
+    		\begin{eqnarray*}
+      			W_t - W_s = B_{t+T} - B_{T} - \left(B_{s+T} - B_{T}\right) =  B_{t+T} - B_{s+T} = B_{t-s} = B_{t} - B_{s},
+    		\end{eqnarray*}
+    		则对$\forall \xi \in \mathbb{R}$, 
+    		\begin{eqnarray*}
+   				 \E{\left.\exp\left\{T\langle \xi, W_t-W_s \rangle\right\}\right|F_s} = \E{\left.\exp\left\{T\langle \xi, B_t-B_s \rangle\right\}\right|F_s} 
+   				=  \exp\left\{-\frac{(t-s)\left|\xi\right|^2}{2}\right\},
+    		\end{eqnarray*}
+    		故$\{W_t,t\ge 0\}$为一维标准布朗运动。
+  		\end{enumerate}
+      得证.
+	\end{proof}
+\end{document}
