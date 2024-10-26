@@ -1,0 +1,294 @@
+\documentclass{article}
+\usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=3.18cm,right=3.18cm]{geometry}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{xeCJK}
+\usepackage{amsmath,amsfonts,amssymb,amscd,amsthm,mathrsfs}
+\usepackage{tocloft}      % 用于自定义目录格式
+\usepackage{hyperref}     % 用于生成超链接
+
+\setlength{\parindent}{2em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem*{problem}{\itshape 论述题}
+\newtheorem*{Solution}{\itshape Solution}
+\renewenvironment{Solution}[1][\itshape]{%
+  \par\noindent\textbf{#1}\quad\CJKfamily{SimSun}%
+}{\par}
+
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep
+        \bfseries\itshape
+    #1\@addpunct{.}]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+% 设置 hyperref 的选项
+\hypersetup{
+    % colorlinks=true,    % 设置超链接为彩色
+    % linkcolor=blue,     % 设置目录项超链接的颜色
+    urlcolor=blue,      % 设置 URL 的颜色
+    pdfborder={0 0 0}   % 去掉超链接的边框
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{第 \thepage 页~~共 \pageref{LastPage} 页}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\labelenumi}{\arabic{enumi}.}
+\renewcommand{\labelenumii}{(\arabic{enumii})}
+\renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
+
+
+\linespread{1.4}										% 行距
+\expandafter\def\expandafter\normalsize\expandafter{
+	\setlength\abovedisplayskip{3pt}					% 公式前行距
+	\setlength\belowdisplayskip{3pt}                    % 公式后行距
+}
+\setlist{
+	topsep    = 0pt,
+	parsep    = 0pt,
+	itemsep   = 1pt,
+	partopsep = 3pt
+}
+
+    	\titleformat{\section}[hang]{\bfseries \large}{\thesection.}{0.5em}{}
+    	\titlespacing{\section}{0em}{2ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+    
+    	% subsection
+    	\titleformat{\subsection}[hang]{\bfseries}{\thesubsection.}{0.5em}{}
+    	\titlespacing{\subsection}{0em}{1.5ex plus 1ex minus .2ex}{0.5ex plus .2ex}
+
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+
+\begin{document}
+
+\vspace{1em}
+\begin{center}
+\textbf{\LARGE 《信用风险估值》期末试卷（开卷）}\par
+\vspace{6pt}
+\end{center}
+
+\renewcommand{\arraystretch}{1.4} % 设置行间距
+\begin{center}
+  \large
+  \begin{tabular}{c c c}
+    \multicolumn{3}{c}{2023-2024 学年第二学期 \hspace{3em} 年级: \underline{\hspace{0.5cm}2023级金融工程\hspace{0.5cm}}} \\
+    姓名: \underline{\hspace{1cm}熊雄\hspace{1cm}} & 学号: \underline{\hspace{0.5cm}20234213001\hspace{0.5cm}} & 成绩: \underline{\hspace{3cm}} \\
+\end{tabular}
+\end{center}
+
+\hrule height 1pt
+%\noindent
+%\rule{\textwidth}{1pt}
+\begin{problem}
+  试概括总结本课程内容，阐述你对于信用风险的建模、估值和对冲的理解和认识，并对本课程教学内容和教学方式提出你的建议。 
+\end{problem}
+\section{课程概要}
+
+本课程主要围绕信用风险的建模、估值和对冲展开，主要参考书为\textit{Credit Risk Modeling} by Bielecki et al. (2009)。
+\begin{definition}[信用风险]
+  信用风险(Credit Risk)指与信用有关的事件所导致的风险、如信用等级的变化、违约风险、利差风险等。
+\end{definition}
+
+
+\subsection{信用衍生产品}
+\begin{definition}[信用衍生产品]
+  信用衍生产品(Credit Derivatives)指以信用敏感资产或指数作为标的的私下议价衍生债券, 它们允许信用风险从交易对手的一方转移到另一方, 从而成为一种方便的控制信用风险敞口的工具。
+\end{definition}
+我们主要研究的信用衍生产品有:
+\begin{enumerate}
+  \item 信用违约互换(Credit Default Swaps，CDS)
+  \item 信用违约期权(Collateralized Debt Obligation，CDO)
+  \item 信用联结票据(Credit-Linked Notes，CLN)
+\end{enumerate}
+
+在美国次贷危机中，由于监管的缺失，信用衍生产品遭到过度开发和随意使用，酿成了灾难性的后果。但金融产品作为工具本身没有问题，关键是人的使用。
+
+\subsection{定价步骤}
+第一步、现金流分析并贴现。
+
+第二步、对贴现现金流取条件期望作为产品价格。
+
+第三步、对违约时间建模。
+
+第四步、计算条件期望。
+
+
+\subsection{含有信用风险的衍生品的一般模型}
+对于一张含有信用风险的合约，到期日$T$，息票收益$c_tdt$，到期收益$M$，违约收益$R_t$，违约时间$\tau$，利率$r_t$，当前信息$\mathcal{G}_t$。对合约持有者来说，合约价值为：
+\begin{eqnarray}
+  V_t=\mathbb{E}\left[\int_t^T I_{\{\tau>S\}} c_s e^{-\int_t^s r_l d l} d s+I_{\{t<\tau \leq T\}} e^{-\int_t^\tau r_s d s} R_t+I_{\{\tau>T\}} M e^{-\int_t^T r_s d s} \bigg| \mathcal{G}_t\right].
+\end{eqnarray}
+
+
+
+\subsection{定价方法}
+在定价过程中，关键是对违约时间$\tau$的刻画，定价方法主要分为以下几类：
+\begin{itemize}
+  \item \textbf{结构化方法}：把公司违约看成是一个内在过程，以公司资产为标的，根据它的债务状况设置违约的“门槛”，以资不抵债为违约准则，在此基础上建立信用风险估值的数学模型。
+  \item \textbf{约化方法}：不需要对公司资产价值过程建模，把公司违约看成是一个外生给定的跳跃过程。对导致公司违约的一切因素和经济背景进行约化，把违约的发生看成是一个不可预测的概率事件，直接通过违约发生的危险率(Hazard Rate)——违约强度来刻画，在此基础上建立信用风险估值的数学模型。
+  \item \textbf{马氏链方法}:通过转移矩阵描述各个状态的转移概率，是约化方法的扩展。和前两种方法相比，马氏链能够描述信用等级的变换，刻画公司间信用质量的传染。但参数多，求解较为困难。
+\end{itemize}
+
+
+
+
+
+
+\section{结构化方法}
+结构化方法从经济学角度来看更具有吸引力，因为它直接把违约事件与公司资本结构演变联系起来，因此涉及市场的基本面。另一个优点是结构方法可直接派生出可违约权益的对冲策略。结构化方法对违约时间的建模没有考虑任何意外性因素。这意味着所产生的随机时间关于基础滤子是可(预)料的。这种特征源于观察到的由结构模型所预测的短期信用利差与市场数据之间的差异。缺陷是需假设公司价值可被直接观测到且可交易。
+
+\subsection{PDE方法}
+在满足6条假设的情况下，利用复制自融资交易策略的方法得到可违约权益价值函数满足的PDE。若只需推导PDE，可不给出复制策略，直接利用凑鞅和伊藤公式得到。
+
+
+
+
+
+
+\subsection{Merton方法}
+设在鞅测度$\mathbb{P}^*$下，假设公司的资产价值过程满足
+\begin{eqnarray}
+  \frac{dV_t}{V_t} = (r - k)dt +\sigma dW_t^*.
+\end{eqnarray}
+公司违约只与到期日$T$需要偿还的债务$L$有关，当公司资产$V_T$小于应偿还债务$L$时，违约发生。违约时间
+\begin{eqnarray}
+  \tau = T\cdot I_{\{V_T<L\}} +\infty \cdot I_{\{V_T\ge L\}}.
+\end{eqnarray}
+
+
+\section{首次经过时间模型(First Passage Time Approach)}
+该模型考虑了违约可能在到期日之前发生。
+一旦公司资产小于某个事先确定的阈值，公司违约。考虑两个一维的伊藤过程$X^1$（公司资产），$X^2$（阈值，常量或变量）满足
+\begin{eqnarray}
+  dX_t^i = X_t^i\left(\mu_i(t)dt + \sigma_i(t)dW_t^i\right),\quad X_0^i = x^i >0,\quad i=1,2,\ldots.
+\end{eqnarray}
+定义违约时间
+\begin{eqnarray}
+  \tau := \inf\{t\ge 0: X_t^1 \le X_t^2\}.
+\end{eqnarray}
+令$Y_t := \ln\left(\frac{X_t^i}{X_t^2}\right)$, 则$\tau = \inf\left\{t\ge 0: Y_t\le 0\right\}$. 可证明
+\begin{eqnarray}
+  \tau := \inf\left\{t\ge 0: Y_t = 0\right\} =  \inf\left\{t\ge 0: Y_t < 0\right\}.
+\end{eqnarray}
+% \subsection{首次经过时间的概率分布}
+
+
+
+
+
+
+
+\subsection{Black-Cox模型}
+对公司零息债券、公司息票债券和公司永久债券进行建模和求解。以公司零息债券为例，可采用PDE方法和概率论方法进行求解。然后考虑最优资本结构，定义最优违约时间
+\begin{eqnarray}
+  \tau^* = \inf\left\{t\ge 0, V_t<V^*\right\},
+\end{eqnarray}
+其中$V^*$为临界水平，股权人会选择$V^*$使得最大化权益$\mathbb{E}[V_t]$价值或者最小化债务$D[V_t]$价值，该最优的$V^*$决定了公司最优资本结构。$V^*$可由ODE解出。
+
+
+
+
+
+
+\section{约化方法}
+从数学角度看，基于强度的随机时间建模取决于可靠性理论中发展的随机时间建模的技术。这种方法中关键的概念是一个参照工具或实体的生存概率，更具体地说，是表示违约强度的风险率。建模的重要内容包括:基础概率测度的选择(根据实际应用，选择真实世界或风险中性概率测度)、建模的目的(风险管理或衍生品估值)以及强度的来源。
+
+模型中没有包括公司价值过程，强度的设置或者是基于市场数据的模型校准或者是基于历史观测值的估计。在这个意义上，违约时间是外生设定的。在约化方法中，违约时间不是一个关于基础信息流的可料停时。与结构方法相反，简约方法允许意外性因素。另外，约化方法也不需要指定公司负债偿还的优先次序结构，而这点在结构方法中通常是需要指定的。
+
+\subsection{单个违约时间}
+定义$\mathbb{H} = (\mathcal{H}_t)_{t\ge0}$为违约信息流（未知），$\mathbb{F} = (\mathcal{F}_t)_{t\ge0}$为市场信息流（已知），一起构成了投资者所能掌握的信息$\mathbb{G} = (\mathcal{G}_t)_{t\ge0}$。违约不能由市场信息完全确定，所以违约对投资者是不可预料的。定义风险过程$\left\{{\Gamma}_t\right\}_{t\geq0}$
+\begin{eqnarray}
+P\left(\tau>t\left|\mathcal{F}_t\right.\right)=e^{-{\Gamma}_t},\quad {\Gamma}_t=\int_{0}^{t}{\lambda_udu}
+\end{eqnarray}
+$\lambda_t$称为风险系数（违约强度）。在计算中，往往只用到风险过程或风险系数，而不直接用违约过程。
+
+分离信息流并消去违约时间，可得到定价公式，包含三部分，息票收益，到期收益和违约收益:
+\begin{equation}
+  V_t=I_{\{\tau>t\}} \left[\int_t^Tcs I_{\{\tau>s\}}e^{-\int_t^srudu}ds +I_{\{\tau>T\}}M_Te^{-\int_t^Trudu} +I_{\{t<\tau\le T\}}R_{\tau} e^{-\int_t^\tau rudu}\right].
+  \end{equation}
+债券价格为
+\begin{eqnarray}
+  V_t &=& \mathbb{E}^*\left[V_t|\mathcal{G}_t\right]\\ 
+  &=& I_{\{\tau>t\}} \mathbb{E}^*\left[\int_t^T\left(cs+\lambda_sR_s\right)e^{-\int_t^s(r_u+\lambda_u)du} + M_Te^{-\int_t^T(r_u+\lambda_u)du} \bigg| \mathcal{F}_t\right].
+\end{eqnarray}
+通过对$r_t,\lambda_t$的动态作出不同的假设可得到各种不同的模型和不一样的结果，这是修改别人已有模型的方法。例如可以对CDS进行定价和估值。
+
+
+
+  \subsection{多个违约时间}
+  
+  条件独立假设，表明所有违约相互独立，违约之间不会相互传染。在多个违约时间的情形，需要在底层概率空间构造一列条件独立的违约时间，对每一个违约时间安排一个风险过程和对应的风险系数。和单个违约时间相同，需要分解信息流和消去违约时间。
+
+  \section{马氏链方法}
+  马氏链方法是约化方法的扩展。约化方法的违约时间可以看作是一个具有吸收状态的条件马氏链的首次跃出时间。普通的约化方法由于条件独立假设，并不能处理双方同时违约的情况，但马氏链可以。
+  \subsection{连续时间条件Markov链}
+  从一个随机矩阵过程出发，构造出一个以定矩阵为密度矩阵的条件马式链。回忆约化方法中对违约状态的基本假设可知，约化方法中的违约时间可视为一个具有吸收状态的双状态条件马式链的首次跃出时间，故可在马式链的框架中讨论约化方法中的问题。并且通过计算，约化方法本质上为一种特殊的两状态马式链。
+  \subsection{含对手信用风险的CDS定价}
+  \subsubsection*{定价模型}
+
+  定义$\mathbb{H}^i = (\mathcal{H}_t^i)_{t\ge0},\ i =1,2$为违约信息流，$\mathbb{F} = (\mathcal{F}_t)_{t\ge0}$为参考信息流，其中$\mathcal{H}_t^i = \sigma\{\tau_i\le s:0\le s\le t\}$, $\tau_1$为参考资产违约的时间，$\tau_2$为CDS卖方违约时间。$\mathcal{G}_t = \mathcal{F}_t\vee \mathcal{H}^1_t\vee \mathcal{H}^2_t$, $\mathbb{G} = \left\{\mathcal{G}_t\right\}_{t\ge 0}$是全部的市场信息。
+  
+  
+  不含对手信用风险的CDS的现金流为
+\begin{eqnarray}
+  U_t = -\int_t^Tke^{-\int_t^srudu} I_{\{\tau_1>s\}}ds +I_{\{t<\tau_1\le T\}}(1-R_1)e^{-\int_t^{\tau_1}rudu},
+\end{eqnarray}
+其中$r_t\in \mathcal{F}_t$为无风险利率，该CDS的价格为$u_ t = \mathbb{E}[U_t |\mathcal{G}_t^1]$, 其中$\mathcal{G}_t^1 = \mathcal{F}_t\vee \mathcal{H}^1_t$.
+
+  含对手信用风险的CDS的现金流为
+  \begin{eqnarray}
+    V_t = -\int_t^Tke^{-\int_t^srudu} I_{\{\tau_1>s\}}I_{\{\tau_2>s\}}ds + I_{\{t<\tau_1\le T\}}I_{\{\tau_2>\tau_1\}}(1-R_1)e^{-\int_t^{\tau_1}rudu} \\ + I_{\{t<\tau_2\le T\}}I_{\{\tau_1>\tau_2\}}\left(R_2 u_{\tau_2}^+ -  u_{\tau_2}^-\right) +I_{\{t<\tau_1\le T\}}I_{\{\tau_2=\tau_1\}}R_2(1-R_1)e^{-\int_t^{\tau_2}rudu}.
+  \end{eqnarray}
+该CDS的价格为$v_ t = \mathbb{E}[V_t |\mathcal{G}_t]$. 
+
+则CVA为
+\begin{eqnarray*}
+  \text{CVA}_t&:=&I_{\{\tau_2>t\}}U_t - V_t \\
+&=& I_{\{t<\tau_2\le T\}}e^{-\int_t^{\tau_2}rudu}\left[I_{\{\tau_1>\tau_2\}}\left(U_{\tau_2} - u_{\tau_2}+(1-R_2)U_{\tau_2}^+\right)+ I_{\left\{\tau_1=\tau_2\right\}}(1-R_1)(1-R_2)\right].
+\end{eqnarray*}
+对手信用风险的价格为
+\begin{eqnarray*}
+  \text{cva}_t&:=&\mathbb{E}\left[ \text{CVA}_t |\mathcal{G}_t\right] \\
+&=& \mathbb{E} \left[I_{\{t<\tau_2\le T\}}e^{-\int_t^{\tau_2}rudu}I_{\{\tau_1>\tau_2\}}\left(\overline{u}_{\tau_2} - u_{\tau_2}+(1-R_2)U_{\tau_2}^+\right) +I_{\left\{\tau_1=\tau_2\right\}}(1-R_1)(1-R_2) \big| \mathcal{G}_t \right].
+\end{eqnarray*}
+\subsubsection*{Markov Copula}
+金融意义：在Markov Copula条件假设下，参考资产和CDS卖方的违约不相互传染。
+
+\subsubsection*{PDE方法}
+
+设参考信息流的驱动过程$X_t$满足$dX_t = \mu(X_t,t)dt +\sigma(X_t,t)dW_t$。分别在$\{\tau_1 > t\}$, $\{\tau_1 > t,\tau_2>t\}$和$\{\tau_1>t,\tau_2>t\}$上得到满足的PDE。结论：一张CDS的交易对手风险价值是对无对手风险的CDS和有对手风险的CDS价值的差值。
+
+
+\section{教学内容和教学方式的建议}
+
+\begin{itemize}
+    \item \textbf{内容深度和广度}
+    \begin{itemize}
+        \item 增加对实际案例的分析，通过具体案例的建模、求解和分析过程，显示应用信用风险估值的原理，研究和解决金融实际问题的基本思路和方法。
+        \item 扩展内容，涵盖更多最新的研究成果和实践工具。
+    \end{itemize}
+    
+    \item \textbf{教学方式}
+    \begin{itemize}
+        \item 某些章节可以采用翻转课堂的教学方式，让学生提前预习教材内容，上课时通过讨论和案例分析来加深理解。
+        \item 适当增加项目作业，鼓励学生动手实践，提高实际操作能力。
+    \end{itemize}
+\end{itemize}
+
+
+
+ 
+\end{document}
