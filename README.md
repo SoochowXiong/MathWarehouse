@@ -202,6 +202,6 @@
 - 项目维护者：[Shen](https://github.com/ShenFeilang), [Wu](https://github.com/Jessiewu5), [Xue](https://github.com/xuejiahua) 和 [Xiong](https://github.com/SoochowXiong)
 - 联系方式：shenfei173205@126.com, Jessie.Wu5712@gmail.com, jiahua.xue@icloud.com和 SoochowXiong@gmail.com
 
-希望您在本数学资源库中享受数学考试的乐趣！祝您学习愉快！
+希望您在本数学资源库中享受数学学习（考试）的乐趣！祝您学习愉快！
 
 如需进一步修改或添加内容，请随时告知！
